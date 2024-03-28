@@ -1,0 +1,59 @@
+// Function to generate cookies
+function generateCookies(desiredCookies) {
+    // Check if the current number of cookies is already greater than or equal to the desired amount
+    if (Game.cookies >= desiredCookies) {
+        return;
+    }
+
+    // Set the desired amount of cookies in Cookie Clicker
+    Game.cookies = desiredCookies;
+
+    // Update the display to show the new amount of cookies
+    Game.RefreshStore();
+    Game.UpdateMenu();
+}
+
+// Function to initialize the script
+function initializeScript() {
+    // Create a container div
+    var container = document.createElement("div");
+    container.style.position = "fixed";
+    container.style.top = "50%";
+    container.style.left = "50%";
+    container.style.transform = "translate(-50%, -50%)";
+    container.style.textAlign = "center";
+
+    // Create an input field for entering the desired amount of cookies
+    var input = document.createElement("input");
+    input.type = "number";
+    input.id = "cookieAmount";
+    input.placeholder = "Enter desired amount of cookies";
+    input.style.marginRight = "10px";
+
+    // Create a button to trigger cookie generation
+    var button = document.createElement("button");
+    button.innerHTML = "Generate Cookies";
+    button.onclick = function() {
+        var desiredCookies = parseInt(document.getElementById("cookieAmount").value);
+        if (!isNaN(desiredCookies) && desiredCookies >= 0) {
+            generateCookies(desiredCookies);
+        } else {
+            alert("Please enter a valid non-negative number for the desired amount of cookies.");
+        }
+    };
+
+    // Add the input field and button to the container
+    container.appendChild(input);
+    container.appendChild(button);
+
+    // Add the container to the document body
+    document.body.appendChild(container);
+}
+
+// Wait for the Cookie Clicker game to load before initializing the script
+var checkReady = setInterval(function() {
+    if (typeof Game !== "undefined" && Game.ready) {
+        clearInterval(checkReady);
+        initializeScript();
+    }
+}, 1000);
